@@ -6,7 +6,7 @@ To do list:
     - [X] create frontend dir
     - [X] create-react-app boiler template
     - [X] create hello world page
-- [] create backend using golang and chi router
+- [x] create backend using golang and chi router
     - [X] create backend dir
     - [X] create a web server with chi router
     - [X] endpoint /status that returns json with status of application

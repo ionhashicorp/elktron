@@ -1,0 +1,20 @@
+name: go-distroless-container
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Login to DockerHUB Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: buildx
+        run: |
+          docker buildx create --use --name builder --driver-opt network=host
+          docker buildx inspect --bootstrap
+      - name: fdsa
+        run: docker buildx build --builder builder --file Dockerfile.backend --platform linux/amd64,linux/arm64,linux/arm/v7 --tag ionhasihcorp/frontend:latest --push .

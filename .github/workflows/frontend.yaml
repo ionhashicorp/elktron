@@ -3,6 +3,10 @@ on: workflow_dispatch
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -10,3 +14,9 @@ jobs:
         run: npm ci
       - name: Build project
         run: npm run build
+      - name: Login to DockerHUB Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Build Docker image
+        run: docker build . --file Dockerfile.frontend --tag ionhasihcorp/frontend:latest
+      - name: Push to Docker Hub
+        run: docker push ionhasihcorp/frontend:latest
